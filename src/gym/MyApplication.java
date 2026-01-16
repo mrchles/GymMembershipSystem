@@ -45,6 +45,8 @@ public class MyApplication {
         String type = scanner.nextLine();
         System.out.print("Months: ");
         int months = scanner.nextInt();
+        System.out.print("Active?: ");
+        String active = scanner.nextLine();
 
         controller.addMember(name, type, months);
         System.out.println("Member added!");
