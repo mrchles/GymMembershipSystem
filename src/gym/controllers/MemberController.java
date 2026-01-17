@@ -23,4 +23,9 @@ public class MemberController implements IMemberController {
 
     @Override
     public void showActiveMemberships() { repository.showActiveMemberships();};
+
+    @Override
+    public void deleteMember(int id) {
+        repository.deleteMember(id);
+  }
 }

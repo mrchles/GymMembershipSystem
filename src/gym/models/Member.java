@@ -7,15 +7,15 @@ public class Member {
     private int months;
     private double price;
     private boolean active;
+    private int trainerId;
 
-    public Member(int id, String fullName, String type, int months, double price) {
+    public Member(int id, String fullName, String type, int months, double price ,int trainerId) {
         this.id = id;
         this.fullName = fullName;
         this.type = type;
         this.months = months;
         this.price = price;
-        this.active = active;
-        boolean active = true;
-        if (months <= 0) active = false;
+        this.active = months > 0;
+        this.trainerId = trainerId;
     }
 }
