@@ -1,23 +1,41 @@
 package gym.controllers;
 
-import gym.controllers.interfaces.IMemberController;
-import gym.repo.interfaces.IMemberRepository;
+import gym.repositories.MemberRepository;
 
-public class MemberController implements IMemberController {
+import java.util.List;
+import gym.models.Member;
 
-    private final IMemberRepository repository;
+public class MemberController {
 
-    public MemberController(IMemberRepository repository) {
-        this.repository = repository;
+    private final MemberRepository repo;
+
+    public MemberController(MemberRepository repo) {
+        this.repo = repo;
     }
 
-    @Override
     public void addMember(String name, String type, int months) {
-        repository.addMember(name, type, months);
+        repo.addMember(name, type, months);
     }
 
-    @Override
-    public void showMembers() {
-        repository.showAll();
+    public List<Member> getAllMembers() {
+        return repo.getAllMembers();
+    }
+
+    public void showAll() {
+        List<Member> members = repo.getAllMembers();
+        System.out.println("Members:");
+        for (Member m : members) {
+            System.out.println(
+                    m.id + ". " + m.fullName +
+                            " | " + m.type +
+                            " | months: " + m.months +
+                            " | price: " + m.price +
+                            " | trainer_id: " + m.trainerId
+            );
+        }
+    }
+
+    public void assignTrainer(int memberId, int trainerId) {
+        repo.assignTrainer(memberId, trainerId);
     }
 }

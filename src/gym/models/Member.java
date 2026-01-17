@@ -1,21 +1,19 @@
 package gym.models;
 
 public class Member {
-    private int id;
-    private String fullName;
-    private String type;
-    private int months;
-    private double price;
-    private boolean active;
+    public int id;
+    public String fullName;
+    public String type;
+    public int months;
+    public double price;
+    public Integer trainerId; // теперь Integer, чтобы можно было хранить null
 
-    public Member(int id, String fullName, String type, int months, double price) {
+    public Member(int id, String fullName, String type, int months, double price, Integer trainerId) {
         this.id = id;
         this.fullName = fullName;
         this.type = type;
         this.months = months;
         this.price = price;
-        this.active = active;
-        boolean active = true;
-        if (months <= 0) active = false;
+        this.trainerId = trainerId;
     }
 }
