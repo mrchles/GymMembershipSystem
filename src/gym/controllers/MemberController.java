@@ -20,4 +20,8 @@ public class MemberController implements IMemberController {
     public void showMembers() {
         repository.showAll();
     }
+    @Override
+    public void deleteMember(int id) {
+        repository.deleteMember(id);
+    }
 }

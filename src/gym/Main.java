@@ -4,7 +4,7 @@ import gym.controllers.MemberController;
 import gym.controllers.interfaces.IMemberController;
 import gym.data.PostgresDB;
 import gym.data.interfaces.IDB;
-import gym.repositories.MemberRepository;
+import gym.repo.MemberRepository;
 import gym.repo.interfaces.IMemberRepository;
 
 public class Main {

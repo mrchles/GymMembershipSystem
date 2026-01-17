@@ -1,4 +1,4 @@
-package gym.repositories;
+package gym.repo;
 
 import gym.data.interfaces.IDB;
 import gym.repo.interfaces.IMemberRepository;
@@ -75,4 +75,22 @@ public class MemberRepository implements IMemberRepository {
             System.out.println(e.getMessage());
         }
     }
+
+    @Override
+    public void deleteMember(int id) {
+        String sql = "DELETE FROM members WHERE id = ?";
+        try (PreparedStatement st = db.getConnection().prepareStatement(sql)) {
+            st.setInt(1, id);
+            int rows = st.executeUpdate();
+
+            if (rows > 0) {
+                System.out.println("Member deleted successfully.");
+            } else {
+                System.out.println("Member not found.");
+            }
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+    }
 }
+

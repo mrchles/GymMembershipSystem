@@ -17,11 +17,11 @@ public class MyApplication {
         boolean run = true;
 
         while (run) {
-            System.out.println("\n=== GYM FITNESS SYSTEM ===");
-            System.out.println("1. ДОБАВИТЬ УЧАСТНИКА");
+            System.out.println("=== GYM FITNESS SYSTEM ===");
+            System.out.println("1.ADD A MEMBER");
             System.out.println("2. ПОКАЗАТЬ ВСЕХ УЧАСТНИКОВ");
             System.out.println("3. ПОКАЗАТЬ ВСЕХ АКТИВНЫХ УЧАСТНИКОВ");
-            System.out.println("4. Show members");
+            System.out.println("4. Delete member");
             System.out.println("5. Show members");
             System.out.println("0. ВЫХОД");
             System.out.print("ВВОД: ");
@@ -32,8 +32,11 @@ public class MyApplication {
             switch (choice) {
                 case 1 -> addMember();
                 case 2 -> controller.showMembers();
+                case 4 -> deleteMember();
                 case 0 -> run = false;
                 default -> System.out.println("Wrong option");
+
+
             }
         }
     }
@@ -50,5 +53,13 @@ public class MyApplication {
 
         controller.addMember(name, type, months);
         System.out.println("Member added!");
+    }
+
+    private void deleteMember() {
+        System.out.print("Enter member ID to delete: ");
+        int id = scanner.nextInt();
+        scanner.nextLine();
+
+        controller.deleteMember(id);
     }
 }
