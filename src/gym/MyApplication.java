@@ -17,14 +17,14 @@ public class MyApplication {
         boolean run = true;
 
         while (run) {
-            System.out.println("\n=== GYM FITNESS SYSTEM ===");
-            System.out.println("1. ДОБАВИТЬ УЧАСТНИКА");
-            System.out.println("2. ПОКАЗАТЬ ВСЕХ УЧАСТНИКОВ");
-            System.out.println("3. ПОКАЗАТЬ ВСЕХ АКТИВНЫХ УЧАСТНИКОВ");
-            System.out.println("4. Show members");
-            System.out.println("5. Show members");
-            System.out.println("0. ВЫХОД");
-            System.out.print("ВВОД: ");
+            System.out.println("gym fitness membership system");
+            System.out.println("1. add member");
+            System.out.println("2. show all members");
+            System.out.println("3. show active memberships");
+            System.out.println("4. choose coaches");
+            System.out.println("5. deactivate membership for user");
+            System.out.println("0. exit");
+            System.out.print("enter: ");
 
             int choice = scanner.nextInt();
             scanner.nextLine();
@@ -32,23 +32,25 @@ public class MyApplication {
             switch (choice) {
                 case 1 -> addMember();
                 case 2 -> controller.showMembers();
+                case 3 -> controller.showActiveMemberships();
                 case 0 -> run = false;
-                default -> System.out.println("Wrong option");
+                default -> System.out.println("wrong option");
             }
         }
     }
 
     private void addMember() {
-        System.out.print("Full name: ");
+        System.out.print("full name: ");
         String name = scanner.nextLine();
-        System.out.print("Type (STANDARD / PREMIUM): ");
+        System.out.print("type (STANDARD / PREMIUM): ");
         String type = scanner.nextLine();
-        System.out.print("Months: ");
+        System.out.print("months: ");
         int months = scanner.nextInt();
-        System.out.print("Active?: ");
-        String active = scanner.nextLine();
-
-        controller.addMember(name, type, months);
-        System.out.println("Member added!");
+        scanner.nextLine();
+        System.out.print("active?: ");
+        scanner.nextLine();
+        boolean active = Boolean.parseBoolean(scanner.nextLine());
+        controller.addMember(name, type, months, active);
+        System.out.println("member added");
     }
 }

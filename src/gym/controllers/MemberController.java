@@ -12,12 +12,15 @@ public class MemberController implements IMemberController {
     }
 
     @Override
-    public void addMember(String name, String type, int months) {
-        repository.addMember(name, type, months);
+    public void addMember(String name, String type, int months,Boolean active) {
+        repository.addMember(name, type, months,active);
     }
 
     @Override
     public void showMembers() {
         repository.showAll();
     }
+
+    @Override
+    public void showActiveMemberships() { repository.showActiveMemberships();};
 }

@@ -1,4 +1,4 @@
-package gym.repositories;
+package gym.repo;
 
 import gym.data.interfaces.IDB;
 import gym.repo.interfaces.IMemberRepository;
@@ -22,6 +22,7 @@ public class MemberRepository implements IMemberRepository {
                 type VARCHAR(20),
                 months INT,
                 price DOUBLE PRECISION
+                active VARCHAR(20)
             )
         """;
 
@@ -33,7 +34,7 @@ public class MemberRepository implements IMemberRepository {
     }
 
     @Override
-    public void addMember(String name, String type, int months) {
+    public void addMember(String name, String type, int months,Boolean active) {
         double price;
 
         if (type.equalsIgnoreCase("PREMIUM")) {
@@ -42,13 +43,14 @@ public class MemberRepository implements IMemberRepository {
             price = 10000 * months;
         }
 
-        String sql = "INSERT INTO members(full_name, type, months, price) VALUES (?, ?, ?, ?)";
+        String sql = "INSERT INTO members(full_name, type, months, price,active) VALUES (?, ?, ?, ?,?)";
 
         try (PreparedStatement st = db.getConnection().prepareStatement(sql)) {
             st.setString(1, name);
             st.setString(2, type);
             st.setInt(3, months);
             st.setDouble(4, price);
+            st.setBoolean(5,active);
             st.executeUpdate();
         } catch (Exception e) {
             System.out.println(e.getMessage());
@@ -75,4 +77,27 @@ public class MemberRepository implements IMemberRepository {
             System.out.println(e.getMessage());
         }
     }
+    @Override
+    public void showActiveMemberships() {
+        String sql = "SELECT * FROM members WHERE active = 'true'";
+
+        try (Statement st = db.getConnection().createStatement();
+             ResultSet rs = st.executeQuery(sql)) {
+
+            System.out.println("active members:");
+            while (rs.next()) {
+                System.out.println(
+                        rs.getInt("id") + ". " +
+                                rs.getString("full_name") +
+                                " | " + rs.getString("type") +
+                                " | months: " + rs.getInt("months") +
+                                " | price: " + rs.getDouble("price")
+                );
+            }
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+    }
+
+
 }
