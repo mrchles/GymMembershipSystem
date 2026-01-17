@@ -23,24 +23,29 @@ public class MyApplication {
         boolean run = true;
 
         while (run) {
-            System.out.println("\n=== GYM FITNESS SYSTEM ===");
-            System.out.println("1. Add member");
-            System.out.println("2. Show all members");
-            System.out.println("3. Show all trainers");
-            System.out.println("4. Choose trainer for member");
-            System.out.println("0. Exit");
-            System.out.print("Enter choice: ");
+            System.out.println("=== GYM FITNESS SYSTEM ===");
+            System.out.println("1.ADD A MEMBER");
+            System.out.println("2. ПОКАЗАТЬ ВСЕХ УЧАСТНИКОВ");
+            System.out.println("3. ПОКАЗАТЬ ВСЕХ АКТИВНЫХ УЧАСТНИКОВ");
+            System.out.println("4. Delete member");
+            System.out.println("5. Show members");
+            System.out.println("0. ВЫХОД");
+            System.out.print("ВВОД: ");
 
             int choice = scanner.nextInt();
-            scanner.nextLine(); // очистка буфера
+            scanner.nextLine();
 
             switch (choice) {
                 case 1 -> addMember();
+                case 2 -> controller.showMembers();
+                case 4 -> deleteMember();
                 case 2 -> memberController.showAll();
                 case 3 -> showAllTrainers();
                 case 4 -> trainerController.chooseTrainer();
                 case 0 -> run = false;
                 default -> System.out.println("Wrong option");
+
+
             }
         }
     }
@@ -48,10 +53,8 @@ public class MyApplication {
     private void addMember() {
         System.out.print("Full name: ");
         String name = scanner.nextLine();
-
         System.out.print("Type (STANDARD / PREMIUM): ");
         String type = scanner.nextLine();
-
         System.out.print("Months: ");
         int months = scanner.nextInt();
         scanner.nextLine();
@@ -66,5 +69,13 @@ public class MyApplication {
         for (Trainer t : trainers) {
             System.out.println(t.id + ". " + t.name + " (" + t.specialization + ")");
         }
+    }
+
+    private void deleteMember() {
+        System.out.print("Enter member ID to delete: ");
+        int id = scanner.nextInt();
+        scanner.nextLine();
+
+        controller.deleteMember(id);
     }
 }

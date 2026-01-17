@@ -38,4 +38,8 @@ public class MemberController {
     public void assignTrainer(int memberId, int trainerId) {
         repo.assignTrainer(memberId, trainerId);
     }
+    @Override
+    public void deleteMember(int id) {
+        repository.deleteMember(id);
+    }
 }

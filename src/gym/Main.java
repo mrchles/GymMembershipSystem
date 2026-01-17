@@ -1,10 +1,10 @@
 package gym;
 
 import gym.controllers.MemberController;
-import gym.controllers.TrainerController;
+import gym.controllers.interfaces.IMemberController;
 import gym.data.PostgresDB;
 import gym.data.interfaces.IDB;
-import gym.repositories.MemberRepository;
+import gym.repo.MemberRepository;
 import gym.repositories.TrainerRepository;
 
 public class Main {
@@ -14,19 +14,12 @@ public class Main {
         IDB db = new PostgresDB(
                 "jdbc:postgresql://localhost:5432", "notsomedb", "postgres", "0000");
 
-        // Репозитории
-        MemberRepository memberRepo = new MemberRepository(db);
-        TrainerRepository trainerRepo = new TrainerRepository(db);
+        IMemberRepository repo = new MemberRepository(db);
+        IMemberController controller = new MemberController(repo);
 
-        // Контроллеры
-        MemberController memberController = new MemberController(memberRepo);
-        TrainerController trainerController = new TrainerController(trainerRepo, memberRepo);
-
-        // Приложение
-        MyApplication app = new MyApplication(memberController, trainerController);
+        MyApplication app = new MyApplication(controller);
         app.start();
 
         db.close();
-        System.out.println("Application closed.");
     }
 }
