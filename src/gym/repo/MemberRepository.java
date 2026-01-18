@@ -64,7 +64,7 @@
         }
         @Override
         public void showActiveMemberships() {
-            String sql = "SELECT * FROM members WHERE active IS TRUE";;
+            String sql = "SELECT * FROM members WHERE active IS TRUE";
 
             try (Statement st = db.getConnection().createStatement();
                  ResultSet rs = st.executeQuery(sql)) {

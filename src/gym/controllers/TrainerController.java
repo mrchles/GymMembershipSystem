@@ -30,7 +30,7 @@ public class TrainerController implements ITrainerController {
         List<Trainers> trainers = trainerRepo.getAllTrainers();
         System.out.println("Available trainers:");
         for (Trainers t : trainers) {
-            System.out.println(t.id + ". " + t.name + " (" + t.specialization + ")");
+            System.out.println(t.getId() + ". " + t.getName() + " (" + t.getSpecialization() + ")");
         }
 
         System.out.print("Enter member ID: ");

@@ -12,7 +12,6 @@ public class PostgresDB implements IDB {
 
     public PostgresDB(String host, String dbName, String user, String password) {
         try {
-            Class.forName("org.postgresql.Driver");
             String url = host + "/" + dbName;
             connection = DriverManager.getConnection(url, user, password);
             System.out.println("PostgreSQL connected");

@@ -1,13 +1,23 @@
 package gym.models;
 
 public class Trainers{
-    public int id;
-    public String name;
-    public String specialization;
+    private int id;
+    private String name;
+    private String specialization;
 
     public Trainers(int id, String name, String specialization) {
         this.id = id;
         this.name = name;
         this.specialization = specialization;
+    }
+    public int getId(){
+        return id;
+    }
+    public String getName(){
+        return name;
+    }
+
+    public String getSpecialization() {
+        return specialization;
     }
 }

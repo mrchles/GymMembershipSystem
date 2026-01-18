@@ -72,7 +72,7 @@ public class MyApplication {
         List<Trainers> trainers = trainerController.getAllTrainers();
         System.out.println("Trainers:");
         for (Trainers t : trainers) {
-            System.out.println(t.id + ". " + t.name + " (" + t.specialization + ")");
+            System.out.println(t.getId() + ". " + t.getName() + " (" + t.getSpecialization() + ")");
         }
     }
 }
