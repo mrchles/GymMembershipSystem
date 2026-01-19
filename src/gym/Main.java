@@ -13,8 +13,13 @@ import gym.controllers.TrainerController;
 public class Main {
 
     public static void main(String[] args) {
+        String url = System.getenv("DB_URL");
+        String user = System.getenv("DB_USER");
+        String password = System.getenv("DB_PASSWORD");
+        String dbName = System.getenv("DB_NAME");
 
-        IDB db = new PostgresDB("jdbc:postgresql://localhost:5432", "notsomedb", "postgres", "0000");
+        IDB db = new PostgresDB(url, dbName, user, password);
+
 
         MemberRepository memberRepo = new MemberRepository(db);
         IMemberController memberController = new MemberController(memberRepo);

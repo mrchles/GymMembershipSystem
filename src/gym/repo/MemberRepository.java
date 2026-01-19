@@ -100,7 +100,9 @@
             } catch (Exception e) {
                 System.out.println(e.getMessage());
             }
-        } public void assignTrainer(int memberId, int trainerId) {
+        }
+
+        public void assignTrainer(int memberId, int trainerId) {
             String sql = "UPDATE members SET trainer_id=? WHERE id=?";
             try (PreparedStatement ps = db.getConnection().prepareStatement(sql)) {
                 ps.setInt(1, trainerId);
