@@ -2,8 +2,11 @@
 
     import gym.data.interfaces.IDB;
     import gym.repo.interfaces.IMemberRepository;
+    import gym.models.Member;
 
     import java.sql.*;
+    import java.util.ArrayList;
+    import java.util.List;
 
     public class MemberRepository implements IMemberRepository {
 
@@ -14,18 +17,8 @@
         }
 
 
-
         @Override
-        public void addMember(String name, String type, int months,Boolean active) {
-            double price;
-
-            if (type.equalsIgnoreCase("premium")) {
-                price = 15000 * months;
-            } else if (type.equalsIgnoreCase("VIP")) {
-                price = 25000 * months;
-            } else { // STANDARD
-                price = 10000 * months;
-            }
+        public void addMember(String name, String type, int months,double price ,Boolean active) {
 
             String sql = "INSERT INTO members(full_name, type, months, price,active) VALUES (?, ?, ?, ?,?)";
 
@@ -36,82 +29,78 @@
                 st.setDouble(4, price);
                 st.setBoolean(5,active);
                 st.executeUpdate();
-            } catch (Exception e) {
+            } catch (SQLException e) {
                 System.out.println(e.getMessage());
             }
         }
 
         @Override
-        public void showAll() {
+        public List<Member> getAllMembers() {
+            List<Member> members = new ArrayList<>();
             String sql = "SELECT * FROM members ";
 
             try (Statement st = db.getConnection().createStatement();
                  ResultSet rs = st.executeQuery(sql)) {
 
                 while (rs.next()) {
-                    System.out.println(
-                            rs.getInt("id") + ". " +
-                                    rs.getString("full_name") +
-                                    " | " + rs.getString("type") +
-                                    " | months: " + rs.getInt("months") +
-                                    " | price: " + rs.getDouble("price") +
-                                    " | trainer ID : "+ rs.getObject("trainer_id")
-                    );
+                    members.add(new Member(
+                            rs.getInt("id"),
+                            rs.getString("full_name"),
+                            rs.getString("type"),
+                            rs.getInt("months"),
+                            rs.getDouble("price"),
+                            rs.getInt("trainer_id"),
+                            rs.getBoolean("active")
+                    ));
                 }
-            } catch (Exception e) {
+            } catch (SQLException e) {
                 System.out.println(e.getMessage());
             }
+            return members;
         }
         @Override
-        public void showActiveMemberships() {
+        public List<Member> getActiveMembers() {
+            List<Member> members = new ArrayList<>(); {
             String sql = "SELECT * FROM members WHERE active IS TRUE";
 
             try (Statement st = db.getConnection().createStatement();
                  ResultSet rs = st.executeQuery(sql)) {
 
-                System.out.println("active members:");
                 while (rs.next()) {
-                    System.out.println(
-                            rs.getInt("id") +
-                                    ". " + rs.getString("full_name") +
-                                    " | " + rs.getString("type") +
-                                    " | months: " + rs.getInt("months") +
-                                    " | price: " + rs.getDouble("price") +
-                                    " | trainer ID : "+ rs.getObject("trainer_id")
-                    );
+                    members.add(new Member(
+                            rs.getInt("id"),
+                            rs.getString("full_name"),
+                            rs.getString("type"),
+                            rs.getInt("months"),
+                            rs.getDouble("price"),
+                            rs.getInt("trainer_id"),
+                            rs.getBoolean("active")
+                    ));
                 }
-            } catch (Exception e) {
-                System.out.println(e.getMessage());
-            }
-        }
-
-        @Override
-        public void deleteMember(int id) {
-            String sql = "DELETE FROM members WHERE id = ?";
-            try (PreparedStatement st = db.getConnection().prepareStatement(sql)) {
-                st.setInt(1, id);
-                int rows = st.executeUpdate();
-
-                if (rows > 0) {
-                    System.out.println("Member deleted successfully.");
-                } else {
-                    System.out.println("Member not found.");
-                }
-            } catch (Exception e) {
-                System.out.println(e.getMessage());
-            }
-        }
-
-        public void assignTrainer(int memberId, int trainerId) {
-            String sql = "UPDATE members SET trainer_id=? WHERE id=?";
-            try (PreparedStatement ps = db.getConnection().prepareStatement(sql)) {
-                ps.setInt(1, trainerId);
-                ps.setInt(2, memberId);
-                ps.executeUpdate();
             } catch (SQLException e) {
                 System.out.println(e.getMessage());
             }
         }
-
-
-    }
+            return members;
+        }
+        @Override
+        public Boolean deleteMember(int id) {
+            String sql = "DELETE FROM members WHERE id = ?";
+            try (PreparedStatement st = db.getConnection().prepareStatement(sql)) {
+                st.setInt(1, id);
+                return st.executeUpdate() > 0;
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }}
+            @Override
+            public void assignTrainer ( int memberId, int trainerId){
+                String sql = "UPDATE members SET trainer_id=? WHERE id=?";
+                try (PreparedStatement ps = db.getConnection().prepareStatement(sql)) {
+                    ps.setInt(1, trainerId);
+                    ps.setInt(2, memberId);
+                    ps.executeUpdate();
+                } catch (SQLException e) {
+                    System.out.println(e.getMessage());
+                }
+            }
+        }

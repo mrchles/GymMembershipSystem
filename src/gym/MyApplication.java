@@ -23,6 +23,7 @@ public class MyApplication {
 
         while (run) {
             System.out.println("gym fitness membership system");
+            System.out.println("select option:");
             System.out.println("1. add member");
             System.out.println("2. show all members");
             System.out.println("3. show active memberships");
