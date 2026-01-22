@@ -22,7 +22,7 @@ public class MyApplication {
         boolean run = true;
 
         while (run) {
-            System.out.println("gym fitness membership system");
+            System.out.println("gym fitness membership system:");
             System.out.println("select option:");
             System.out.println("1. add member");
             System.out.println("2. show all members");
