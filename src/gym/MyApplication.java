@@ -33,7 +33,12 @@ public class MyApplication {
             System.out.println("0. exit");
             System.out.print("enter: ");
 
-            int choice = scanner.nextInt();
+            int choice = -1;
+            if (scanner.hasNextInt()) {
+                choice = scanner.nextInt();
+            } else {
+                scanner.nextLine(); // clear invalid input
+            }
             scanner.nextLine();
 
             switch (choice) {
@@ -52,23 +57,67 @@ public class MyApplication {
     private void addMember() {
         System.out.print("full name: ");
         String name = scanner.nextLine();
-        System.out.print("type (standart,premium or VIP): ");
-        String type = scanner.nextLine();
-        System.out.print("months: ");
-        int months = scanner.nextInt();
-        scanner.nextLine();
+        if (name.isBlank()) {
+            System.out.println("wrong option");
+            return;
+        }
+
+        String type;
+        while (true) {
+            System.out.println("Choose membership type:");
+            System.out.println("1 - STANDARD");
+            System.out.println("2 - PREMIUM");
+            System.out.println("3 - VIP");
+            System.out.print("Enter choice: ");
+
+            String choice = scanner.nextLine();
+            if (choice.equals("1")) {
+                type = "standard";
+                break;
+            } else if (choice.equals("2")) {
+                type = "premium";
+                break;
+            } else if (choice.equals("3")) {
+                type = "vip";
+                break;
+            } else {
+                System.out.println("wrong option");
+            }
+        }
+
+        int months;
+        while (true) {
+            System.out.print("Enter months (1-12): ");
+            if (scanner.hasNextInt()) {
+                months = scanner.nextInt();
+                scanner.nextLine();
+                if (months > 0 && months <= 12) break;
+            } else {
+                scanner.nextLine(); // clear invalid input
+            }
+            System.out.println("wrong option");
+        }
+
         boolean active = months > 0;
         controller.addMember(name, type, months, active);
-        System.out.println("member added");
     }
 
     private void deleteMember() {
-        System.out.print("Enter member ID to delete: ");
-        int id = scanner.nextInt();
-        scanner.nextLine();
-
+        int id;
+        while (true) {
+            System.out.print("Enter member ID to delete: ");
+            if (scanner.hasNextInt()) {
+                id = scanner.nextInt();
+                scanner.nextLine();
+                if (id > 0) break;
+            } else {
+                scanner.nextLine(); // clear invalid input
+            }
+            System.out.println("wrong option");
+        }
         controller.deleteMember(id);
     }
+
     private void showAllTrainers() {
         List<Trainers> trainers = trainerController.getAllTrainers();
         System.out.println("Trainers:");

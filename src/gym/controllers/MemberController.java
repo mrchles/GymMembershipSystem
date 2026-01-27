@@ -14,19 +14,39 @@ public class MemberController implements IMemberController {
     }
 
     @Override
-    public void addMember(String name, String type, int months,boolean active) {
+    public void addMember(String name, String type, int months, boolean active) {
+
+        if (name == null || name.isBlank()) {
+            System.out.println("Name cannot be empty");
+            return;
+        }
+
+        if (months <= 0) {
+            System.out.println("Months must be greater than 0");
+            return;
+        }
+
+        if (!type.equalsIgnoreCase("standard")
+                && !type.equalsIgnoreCase("premium")
+                && !type.equalsIgnoreCase("vip")) {
+            System.out.println("Invalid membership type");
+            return;
+        }
+
         double price;
 
         if (type.equalsIgnoreCase("premium")) {
             price = 15000 * months;
-        } else if (type.equalsIgnoreCase("VIP")) {
+        } else if (type.equalsIgnoreCase("vip")) {
             price = 25000 * months;
-        } else { // STANDARD
+        } else {
             price = 10000 * months;
         }
-        repository.addMember(name, type, months,price,active);
-        System.out.println("member added successfully");
+
+        repository.addMember(name, type, months, price, active);
+        System.out.println("Member added successfully");
     }
+
 
     @Override
     public void showMembers() {
@@ -42,7 +62,16 @@ public class MemberController implements IMemberController {
 
     @Override
     public void deleteMember(int id) {
-        if (repository.deleteMember(id)) System.out.println("member successfully deleted");
-        else System.out.println("member is not exist");
-  }
+
+        if (id <= 0) {
+            System.out.println("Invalid member ID");
+            return;
+        }
+
+        if (repository.deleteMember(id)) {
+            System.out.println("Member successfully deleted");
+        } else {
+            System.out.println("Member not found");
+        }
+    }
 }
