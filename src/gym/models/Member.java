@@ -18,6 +18,7 @@ public class Member {
         this.trainerId = trainerId;
         this.subscription = subscription;
     }
+    public String getFullName() {
 
     public int getId() {return id;}
     public String getFullName() {return fullName;}
@@ -46,9 +47,4 @@ public class Member {
                 ", trainerId:" + getTrainerId() +'\'' +
                 '|';
     }
-
-
- }
-
-
-
+}

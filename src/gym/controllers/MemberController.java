@@ -4,6 +4,10 @@ import gym.controllers.interfaces.IMemberController;
 import gym.models.Subscription;
 import gym.repo.interfaces.IMemberRepository;
 import gym.models.Member;
+import gym.models.Role;
+import gym.models.User;
+import gym.repo.interfaces.IMemberRepository;
+
 import java.util.List;
 
 public class MemberController implements IMemberController {
@@ -48,6 +52,12 @@ public class MemberController implements IMemberController {
         repository.addMember(name, subscriptionId, months, price, active);;
         System.out.println("member added successfully");
     }
+
+    public void showMembers(User user) {
+        if (user.getRole() == Role.MEMBER) {
+            System.out.println("Access denied! MEMBERS cannot view full member list.");
+            return;
+        }
 
     @Override
     public void showMembers() {

@@ -1,21 +1,24 @@
-package gym.repo;
+    package gym.repo;
 
 import gym.data.interfaces.IDB;
 import gym.repo.interfaces.IMemberRepository;
 import gym.models.Member;
 import gym.models.Subscription;
+import gym.data.interfaces.IDB;
+import gym.models.Member;
+import gym.repo.interfaces.IMemberRepository;
 
-import java.sql.*;
-import java.util.ArrayList;
-import java.util.List;
+    import java.sql.*;
+    import java.util.ArrayList;
+    import java.util.List;
 
 public class MemberRepository implements IMemberRepository {
 
-    private final IDB db;
+        private final IDB db;
 
-    public MemberRepository(IDB db) {
-        this.db = db;
-    }
+        public MemberRepository(IDB db) {
+            this.db = db;
+        }
 
     @Override
     public void addMember(String name, int subscriptionId, int months, double price, boolean active) {

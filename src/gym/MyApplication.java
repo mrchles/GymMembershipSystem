@@ -5,12 +5,17 @@ import java.util.Scanner;
 import java.util.List;
 import gym.controllers.TrainerController;
 import gym.models.Trainers;
+import gym.models.User;
+
+import java.util.List;
+import java.util.Scanner;
 import gym.models.Subscription;
 
 public class MyApplication {
 
     private final IMemberController controller;
     private final TrainerController trainerController;
+    private final User currentUser;
     private final Scanner scanner = new Scanner(System.in);
 
     public MyApplication(IMemberController controller,
