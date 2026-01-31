@@ -20,10 +20,8 @@ public class TrainerRepository implements ITrainerRepository {
     public List<Trainers> getAllTrainers() {
         List<Trainers> trainers = new ArrayList<>();
         String sql = "SELECT * FROM trainers";
-
         try (Statement st = db.getConnection().createStatement();
              ResultSet rs = st.executeQuery(sql)) {
-
             while (rs.next()) {
                 trainers.add(new Trainers(
                         rs.getInt("id"),
@@ -32,9 +30,20 @@ public class TrainerRepository implements ITrainerRepository {
                 ));
             }
         } catch (SQLException e) {
-            System.out.println("Error to get trainers list: " + e.getMessage());
+            System.out.println("Get trainers error: " + e.getMessage());
         }
-
         return trainers;
+    }
+
+    @Override
+    public void addTrainer(String name, String specialization) {
+        String sql = "INSERT INTO trainers (name, specialization) VALUES (?,?)";
+        try (PreparedStatement st = db.getConnection().prepareStatement(sql)) {
+            st.setString(1, name);
+            st.setString(2, specialization);
+            st.executeUpdate();
+        } catch (SQLException e) {
+            System.out.println("Add trainer error: " + e.getMessage());
+        }
     }
 }

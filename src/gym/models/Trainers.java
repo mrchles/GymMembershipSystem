@@ -1,6 +1,6 @@
 package gym.models;
 
-public class Trainers{
+public class Trainers {
     private int id;
     private String name;
     private String specialization;
@@ -10,23 +10,16 @@ public class Trainers{
         this.name = name;
         this.specialization = specialization;
     }
-    public int getId(){
+
+    public int getId() {
         return id;
     }
-    public String getName(){
+
+    public String getName() {
         return name;
     }
 
     public String getSpecialization() {
         return specialization;
     }
-    @Override
-    public String toString(){
-        return "trainers |"+
-                "id|" + getId() + '\'' +
-                "name|" + getName() + '\'' +
-                "specialization:" + getSpecialization() + '\'' + "}";
-
-    }
-
 }

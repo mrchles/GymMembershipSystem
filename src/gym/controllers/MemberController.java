@@ -1,11 +1,13 @@
 package gym.controllers;
 
-import gym.controllers.interfaces.IMemberController;
-import gym.repo.interfaces.IMemberRepository;
 import gym.models.Member;
+import gym.models.Role;
+import gym.models.User;
+import gym.repo.interfaces.IMemberRepository;
+
 import java.util.List;
 
-public class MemberController implements IMemberController {
+public class MemberController {
 
     private final IMemberRepository repository;
 
@@ -13,10 +15,14 @@ public class MemberController implements IMemberController {
         this.repository = repository;
     }
 
-    @Override
-    public void addMember(String name, String type, int months,boolean active) {
-        double price;
+    // Добавление члена — ADMIN или EDITOR
+    public void addMember(User user, String name, String type, int months, boolean active) {
+        if (user.getRole() != Role.ADMIN && user.getRole() != Role.EDITOR) {
+            System.out.println("Access denied! You cannot add members.");
+            return;
+        }
 
+        double price;
         if (type.equalsIgnoreCase("premium")) {
             price = 15000 * months;
         } else if (type.equalsIgnoreCase("VIP")) {
@@ -24,25 +30,36 @@ public class MemberController implements IMemberController {
         } else { // STANDARD
             price = 10000 * months;
         }
-        repository.addMember(name, type, months,price,active);
-        System.out.println("member added successfully");
+
+        repository.addMember(name, type, months, price, active);
+        System.out.println("Member added successfully");
     }
 
-    @Override
-    public void showMembers() {
+    public void showMembers(User user) {
+        if (user.getRole() == Role.MEMBER) {
+            System.out.println("Access denied! MEMBERS cannot view full member list.");
+            return;
+        }
+
         List<Member> members = repository.getAllMembers();
         members.forEach(System.out::println);
     }
 
-    @Override
-    public void showActiveMemberships() {
+    public void showActiveMemberships(User user) {
         List<Member> members = repository.getActiveMembers();
         members.forEach(System.out::println);
-    };
+    }
 
-    @Override
-    public void deleteMember(int id) {
-        if (repository.deleteMember(id)) System.out.println("member successfully deleted");
-        else System.out.println("member is not exist");
-  }
+    public void deleteMember(User user, int id) {
+        if (user.getRole() != Role.ADMIN) {
+            System.out.println("Access denied! Only ADMIN can delete members.");
+            return;
+        }
+
+        if (repository.deleteMember(id)) {
+            System.out.println("Member successfully deleted");
+        } else {
+            System.out.println("Member does not exist");
+        }
+    }
 }
