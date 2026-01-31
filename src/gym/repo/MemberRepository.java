@@ -4,9 +4,7 @@ import gym.data.interfaces.IDB;
 import gym.repo.interfaces.IMemberRepository;
 import gym.models.Member;
 import gym.models.Subscription;
-import gym.data.interfaces.IDB;
-import gym.models.Member;
-import gym.repo.interfaces.IMemberRepository;
+
 
     import java.sql.*;
     import java.util.ArrayList;

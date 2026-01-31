@@ -6,10 +6,8 @@ import gym.controllers.TrainerController;
 import gym.controllers.interfaces.IMemberController;
 import gym.data.PostgresDB;
 import gym.data.interfaces.IDB;
-import gym.models.Role;
 import gym.models.User;
 import gym.repo.MemberRepository;
-import gym.repo.interfaces.IMemberRepository;
 import gym.repo.TrainerRepository;
 import gym.repo.UserRepository;
 
