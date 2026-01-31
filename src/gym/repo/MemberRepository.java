@@ -1,106 +1,134 @@
-    package gym.repo;
+package gym.repo;
 
-    import gym.data.interfaces.IDB;
-    import gym.repo.interfaces.IMemberRepository;
-    import gym.models.Member;
+import gym.data.interfaces.IDB;
+import gym.repo.interfaces.IMemberRepository;
+import gym.models.Member;
+import gym.models.Subscription;
 
-    import java.sql.*;
-    import java.util.ArrayList;
-    import java.util.List;
+import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 
-    public class MemberRepository implements IMemberRepository {
+public class MemberRepository implements IMemberRepository {
 
-        private final IDB db;
+    private final IDB db;
 
-        public MemberRepository(IDB db) {
-            this.db = db;
+    public MemberRepository(IDB db) {
+        this.db = db;
+    }
+
+    @Override
+    public void addMember(String name, int subscriptionId, int months, double price, boolean active) {
+        String sql = """
+                INSERT INTO members(full_name, subscription_id, months, price, active)
+                VALUES (?, ?, ?, ?, ?)
+                """;
+
+        try (PreparedStatement ps = db.getConnection().prepareStatement(sql)) {
+            ps.setString(1, name);
+            ps.setInt(2, subscriptionId);
+            ps.setInt(3, months);
+            ps.setDouble(4, price);
+            ps.setBoolean(5, active);
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
         }
+    }
 
+    @Override
+    public List<Member> getAllMembers() {
+        List<Member> members = new ArrayList<>();
+        String sql = "SELECT * FROM members";
 
-        @Override
-        public void addMember(String name, String type, int months,double price ,Boolean active) {
+        try (Statement st = db.getConnection().createStatement();
+             ResultSet rs = st.executeQuery(sql)) {
 
-            String sql = "INSERT INTO members(full_name, type, months, price,active) VALUES (?, ?, ?, ?,?)";
+            while (rs.next()) {
+                Subscription sub = getSubscriptionById(rs.getInt("subscription_id"));
 
-            try (PreparedStatement st = db.getConnection().prepareStatement(sql)) {
-                st.setString(1, name);
-                st.setString(2, type);
-                st.setInt(3, months);
-                st.setDouble(4, price);
-                st.setBoolean(5,active);
-                st.executeUpdate();
-            } catch (SQLException e) {
-                System.out.println(e.getMessage());
+                members.add(new Member(
+                        rs.getInt("id"),
+                        rs.getString("full_name"),
+                        rs.getInt("months"),
+                        rs.getDouble("price"),
+                        rs.getInt("trainer_id"),
+                        rs.getBoolean("active"),
+                        sub
+                ));
             }
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
         }
+        return members;
+    }
 
-        @Override
-        public List<Member> getAllMembers() {
-            List<Member> members = new ArrayList<>();
-            String sql = "SELECT * FROM members ";
+    @Override
+    public List<Member> getActiveMembers() {
+        List<Member> members = new ArrayList<>();
+        String sql = "SELECT * FROM members WHERE active = true";
 
-            try (Statement st = db.getConnection().createStatement();
-                 ResultSet rs = st.executeQuery(sql)) {
+        try (Statement st = db.getConnection().createStatement();
+             ResultSet rs = st.executeQuery(sql)) {
 
-                while (rs.next()) {
-                    members.add(new Member(
-                            rs.getInt("id"),
-                            rs.getString("full_name"),
-                            rs.getString("type"),
-                            rs.getInt("months"),
-                            rs.getDouble("price"),
-                            rs.getInt("trainer_id"),
-                            rs.getBoolean("active")
-                    ));
-                }
-            } catch (SQLException e) {
-                System.out.println(e.getMessage());
+            while (rs.next()) {
+                Subscription sub = getSubscriptionById(rs.getInt("subscription_id"));
+
+                members.add(new Member(
+                        rs.getInt("id"),
+                        rs.getString("full_name"),
+                        rs.getInt("months"),
+                        rs.getDouble("price"),
+                        rs.getInt("trainer_id"),
+                        rs.getBoolean("active"),
+                        sub
+                ));
             }
-            return members;
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
         }
-        @Override
-        public List<Member> getActiveMembers() {
-            List<Member> members = new ArrayList<>(); {
-            String sql = "SELECT * FROM members WHERE active IS TRUE";
+        return members;
+    }
 
-            try (Statement st = db.getConnection().createStatement();
-                 ResultSet rs = st.executeQuery(sql)) {
+    @Override
+    public boolean deleteMember(int id) {
+        String sql = "DELETE FROM members WHERE id = ?";
+        try (PreparedStatement ps = db.getConnection().prepareStatement(sql)) {
+            ps.setInt(1, id);
+            return ps.executeUpdate() > 0;
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
 
-                while (rs.next()) {
-                    members.add(new Member(
-                            rs.getInt("id"),
-                            rs.getString("full_name"),
-                            rs.getString("type"),
-                            rs.getInt("months"),
-                            rs.getDouble("price"),
-                            rs.getInt("trainer_id"),
-                            rs.getBoolean("active")
-                    ));
-                }
-            } catch (SQLException e) {
-                System.out.println(e.getMessage());
+    @Override
+    public void assignTrainer(int memberId, int trainerId) {
+        String sql = "UPDATE members SET trainer_id = ? WHERE id = ?";
+        try (PreparedStatement ps = db.getConnection().prepareStatement(sql)) {
+            ps.setInt(1, trainerId);
+            ps.setInt(2, memberId);
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+    }
+
+    public Subscription getSubscriptionById(int id) {
+        String sql = "SELECT * FROM subscriptions WHERE id = ?";
+        try (PreparedStatement ps = db.getConnection().prepareStatement(sql)) {
+            ps.setInt(1, id);
+            ResultSet rs = ps.executeQuery();
+
+            if (rs.next()) {
+                return new Subscription(
+                        rs.getInt("id"),
+                        rs.getString("type"),
+                        rs.getInt("price_per_month")
+                );
             }
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
         }
-            return members;
-        }
-        @Override
-        public Boolean deleteMember(int id) {
-            String sql = "DELETE FROM members WHERE id = ?";
-            try (PreparedStatement st = db.getConnection().prepareStatement(sql)) {
-                st.setInt(1, id);
-                return st.executeUpdate() > 0;
-            } catch (SQLException e) {
-                throw new RuntimeException(e);
-            }}
-            @Override
-            public void assignTrainer ( int memberId, int trainerId){
-                String sql = "UPDATE members SET trainer_id=? WHERE id=?";
-                try (PreparedStatement ps = db.getConnection().prepareStatement(sql)) {
-                    ps.setInt(1, trainerId);
-                    ps.setInt(2, memberId);
-                    ps.executeUpdate();
-                } catch (SQLException e) {
-                    System.out.println(e.getMessage());
-                }
-            }
-        }
+        return null;
+    }
+}

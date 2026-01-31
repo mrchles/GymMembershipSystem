@@ -5,6 +5,7 @@ import java.util.Scanner;
 import java.util.List;
 import gym.controllers.TrainerController;
 import gym.models.Trainers;
+import gym.models.Subscription;
 
 public class MyApplication {
 
@@ -52,13 +53,15 @@ public class MyApplication {
     private void addMember() {
         System.out.print("full name: ");
         String name = scanner.nextLine();
-        System.out.print("type (standart,premium or VIP): ");
-        String type = scanner.nextLine();
+        System.out.print("type (standard,premium or VIP): ");
+        int subscriptionId = scanner.nextInt();
         System.out.print("months: ");
         int months = scanner.nextInt();
+        System.out.println("price:");
+        double price = scanner.nextDouble();
         scanner.nextLine();
         boolean active = months > 0;
-        controller.addMember(name, type, months, active);
+        controller.addMember(name,subscriptionId, months,price, active);
         System.out.println("member added");
     }
 
