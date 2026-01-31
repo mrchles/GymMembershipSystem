@@ -1,6 +1,7 @@
 package gym.controllers;
 
 import gym.controllers.interfaces.IMemberController;
+import gym.models.Subscription;
 import gym.repo.interfaces.IMemberRepository;
 import gym.models.Member;
 import java.util.List;
@@ -14,6 +15,12 @@ public class MemberController implements IMemberController {
     }
 
     @Override
+    public void addMember(String name, int subscriptionId, int months, double price, boolean active) {
+        Subscription sub = repository.getSubscriptionById(subscriptionId);
+        if (sub == null) {
+            System.out.println("Subscription not found!");
+            return;
+        }
     public void addMember(String name, String type, int months, boolean active) {
 
         if (name == null || name.isBlank()) {
@@ -35,18 +42,11 @@ public class MemberController implements IMemberController {
 
         double price;
 
-        if (type.equalsIgnoreCase("premium")) {
-            price = 15000 * months;
-        } else if (type.equalsIgnoreCase("vip")) {
-            price = 25000 * months;
-        } else {
-            price = 10000 * months;
-        }
+        price = sub.getPricePerMonth() * months;
 
-        repository.addMember(name, type, months, price, active);
-        System.out.println("Member added successfully");
+        repository.addMember(name, subscriptionId, months, price, active);;
+        System.out.println("member added successfully");
     }
-
 
     @Override
     public void showMembers() {
