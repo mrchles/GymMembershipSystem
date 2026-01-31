@@ -28,16 +28,46 @@ public class TrainerController implements ITrainerController {
         Scanner sc = new Scanner(System.in);
 
         List<Trainers> trainers = trainerRepo.getAllTrainers();
-        System.out.println("Available trainers:");
-        for (Trainers t : trainers) {
+        int maxTrainers = Math.min(trainers.size(), 5);
+        System.out.println("Available trainers (max 5):");
+        for (int i = 0; i < maxTrainers; i++) {
+            Trainers t = trainers.get(i);
             System.out.println(t.getId() + ". " + t.getName() + " (" + t.getSpecialization() + ")");
         }
 
-        System.out.print("Enter member ID: ");
-        int memberId = sc.nextInt();
+        int memberId;
+        while (true) {
+            System.out.print("Enter member ID: ");
+            if (sc.hasNextInt()) {
+                memberId = sc.nextInt();
+                sc.nextLine();
+                if (memberId > 0) break;
+            } else {
+                sc.nextLine();
+            }
+            System.out.println("Invalid ID");
+        }
 
-        System.out.print("Choose trainer ID: ");
-        int trainerId = sc.nextInt();
+        int trainerId;
+        while (true) {
+            System.out.print("Choose trainer ID from the list above: ");
+            if (sc.hasNextInt()) {
+                trainerId = sc.nextInt();
+                sc.nextLine();
+                boolean valid = false;
+                for (int i = 0; i < maxTrainers; i++) {
+                    if (trainers.get(i).getId() == trainerId) {
+                        valid = true;
+                        break;
+                    }
+                }
+
+                if (valid) break;
+            } else {
+                sc.nextLine();
+            }
+            System.out.println("Invalid ID");
+        }
 
         memberRepo.assignTrainer(memberId, trainerId);
         System.out.println("Trainer assigned successfully!");
