@@ -31,7 +31,7 @@ public class MyApplication {
             System.out.println("3. show active memberships");
             System.out.println("4. delete members");
             System.out.println("5. show all trainers:");
-            System.out.println("6. choose trainer:");
+            System.out.println("6. choose trainers:");
             System.out.println("0. exit");
             System.out.print("enter: ");
 
