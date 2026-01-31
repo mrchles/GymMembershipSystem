@@ -19,7 +19,11 @@ public class MemberController implements IMemberController {
     }
 
     @Override
-    public void addMember(String name, int subscriptionId, int months, double price, boolean active) {
+    public void addMember(User user,String name, int subscriptionId, int months, double price, boolean active) {
+        if (user.getRole() == Role.MEMBER) {
+            System.out.println("Access denied! MEMBER cannot add members.");
+            return;
+        }
         if (name == null || name.isBlank()) {
             System.out.println("Name cannot be empty");
             return;
@@ -32,47 +36,39 @@ public class MemberController implements IMemberController {
 
         Subscription sub = repository.getSubscriptionById(subscriptionId);
         if (sub == null) {
-            System.out.println("Subscription not found!");
-            return;
-        }
-
-
-        if (name == null || name.isBlank()) {
-            System.out.println("Name cannot be empty");
-            return;
-        }
-
-        if (months <= 0) {
-            System.out.println("Months must be greater than 0");
+            System.out.println("Subscription not found");
             return;
         }
 
         price = sub.getPricePerMonth() * months;
 
-        repository.addMember(name, subscriptionId, months, price, active);;
-        System.out.println("member added successfully");
+        repository.addMember(name, subscriptionId, months, price, active);
+        System.out.println("Member added successfully");
     }
 
+    @Override
     public void showMembers(User user) {
         if (user.getRole() == Role.MEMBER) {
-            System.out.println("Access denied! MEMBERS cannot view full member list.");
+            System.out.println("Access denied!");
             return;
         }
-
-    @Override
-    public void showMembers() {
         List<Member> members = repository.getAllMembers();
         members.forEach(System.out::println);
     }
 
+
     @Override
-    public void showActiveMemberships() {
+    public void showActiveMemberships(User user) {
         List<Member> members = repository.getActiveMembers();
         members.forEach(System.out::println);
     };
 
     @Override
-    public void deleteMember(int id) {
+    public void deleteMember(User user,int id) {
+        if (user.getRole() == Role.MEMBER) {
+            System.out.println("Access denied!");
+            return;
+        }
 
         if (id <= 0) {
             System.out.println("Invalid member ID");

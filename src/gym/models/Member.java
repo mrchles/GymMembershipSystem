@@ -1,5 +1,4 @@
 package gym.models;
-import gym.models.Subscription;
 public class Member {
     private int id;
     private String fullName;
@@ -18,9 +17,8 @@ public class Member {
         this.trainerId = trainerId;
         this.subscription = subscription;
     }
-    public String getFullName() {
 
-    public int getId() {return id;}
+     public int getId() {return id;}
     public String getFullName() {return fullName;}
     public int getMonths() {
         return months;

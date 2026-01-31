@@ -7,10 +7,6 @@ import gym.controllers.TrainerController;
 import gym.models.Trainers;
 import gym.models.User;
 
-import java.util.List;
-import java.util.Scanner;
-import gym.models.Subscription;
-
 public class MyApplication {
 
     private final IMemberController controller;
@@ -18,10 +14,10 @@ public class MyApplication {
     private final User currentUser;
     private final Scanner scanner = new Scanner(System.in);
 
-    public MyApplication(IMemberController controller,
-                         TrainerController trainerController) {
+    public MyApplication(IMemberController controller, TrainerController trainerController,User currentUser) {
         this.controller = controller;
         this.trainerController = trainerController;
+        this.currentUser = currentUser;
     }
 
     public void start() {
@@ -49,11 +45,11 @@ public class MyApplication {
 
             switch (choice) {
                 case 1 -> addMember();
-                case 2 -> controller.showMembers();
-                case 3 -> controller.showActiveMemberships();
-                case 4 -> deleteMember();
+                case 2 -> controller.showMembers(currentUser);
+                case 3 -> controller.showActiveMemberships(currentUser);
+                case 4 -> deleteMember(currentUser);
                 case 5 -> showAllTrainers();
-                case 6 -> trainerController.chooseTrainer();
+                case 6 -> trainerController.chooseTrainer(currentUser);
                 case 0 -> run = false;
                 default -> System.out.println("wrong option");
             }
@@ -99,13 +95,12 @@ public class MyApplication {
             }
             System.out.println("wrong option");
         }
-        System.out.print("months: ");
         boolean active = months > 0;
-        controller.addMember(name,subscriptionId, months, 0, active);
+        controller.addMember(currentUser,name,subscriptionId, months, 0, active);
         System.out.println("member added");
     }
 
-    private void deleteMember() {
+    private void deleteMember(User currentUser) {
         int id;
         while (true) {
             System.out.print("Enter member ID to delete: ");
@@ -118,10 +113,10 @@ public class MyApplication {
             }
             System.out.println("wrong option");
         }
-        controller.deleteMember(id);
+        controller.deleteMember(this.currentUser,id);
     }
     private void showAllTrainers() {
-        List<Trainers> trainers = trainerController.getAllTrainers();
+        List<Trainers> trainers = trainerController.getAllTrainers(currentUser);
         System.out.println("Trainers:");
         for (Trainers t : trainers) {
             System.out.println(t.getId() + ". " + t.getName() + " (" + t.getSpecialization() + ")");

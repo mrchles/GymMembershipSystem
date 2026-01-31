@@ -3,6 +3,7 @@ package gym;
 import gym.controllers.AuthController;
 import gym.controllers.MemberController;
 import gym.controllers.TrainerController;
+import gym.controllers.interfaces.IMemberController;
 import gym.data.PostgresDB;
 import gym.data.interfaces.IDB;
 import gym.models.Role;
@@ -44,7 +45,7 @@ public class Main {
         TrainerController trainerController = new TrainerController(trainerRepo, memberRepo);
 
 
-        MyApplication app = new MyApplication(memberController, trainerController);
+        MyApplication app = new MyApplication(memberController, trainerController,currentUser);
         app.start();
 
         db.close();

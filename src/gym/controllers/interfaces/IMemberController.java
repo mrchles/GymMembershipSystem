@@ -1,11 +1,13 @@
 package gym.controllers.interfaces;
 
 import gym.models.Member;
+import gym.models.User;
+
 import java.util.List;
 
 public interface IMemberController {
-    void addMember(String name, int subscriptionId, int months, double price, boolean active);
-    void showMembers();
-    void showActiveMemberships();
-    void deleteMember(int id);
+    void addMember(User user, String name, int subscriptionId, int months, double price, boolean active);
+    void showMembers(User user);
+    void showActiveMemberships(User user);
+    void deleteMember(User user,int id);
 }
