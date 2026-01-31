@@ -38,7 +38,7 @@ public class MyApplication {
             if (scanner.hasNextInt()) {
                 choice = scanner.nextInt();
             } else {
-                scanner.nextLine(); // clear invalid input
+                scanner.nextLine();
             }
             scanner.nextLine();
 
@@ -63,7 +63,7 @@ public class MyApplication {
             return;
         }
 
-        String type;
+        int subscriptionId = 0;
         while (true) {
             System.out.println("Choose membership type:");
             System.out.println("1 - STANDARD");
@@ -72,21 +72,17 @@ public class MyApplication {
             System.out.print("Enter choice: ");
 
             String choice = scanner.nextLine();
-            if (choice.equals("1")) {
-                type = "standard";
-                break;
-            } else if (choice.equals("2")) {
-                type = "premium";
-                break;
-            } else if (choice.equals("3")) {
-                type = "vip";
-                break;
-            } else {
-                System.out.println("wrong option");
+            if (choice.equals("1")) subscriptionId = 1;
+            else if (choice.equals("2")) subscriptionId = 2;
+            else if (choice.equals("3")) subscriptionId = 3;
+            else {
+                System.out.println("Wrong option");
+                continue;
             }
+            break;
         }
 
-        int months;
+        int months = 0;
         while (true) {
             System.out.print("Enter months (1-12): ");
             if (scanner.hasNextInt()) {
@@ -94,20 +90,13 @@ public class MyApplication {
                 scanner.nextLine();
                 if (months > 0 && months <= 12) break;
             } else {
-                scanner.nextLine(); // clear invalid input
+                scanner.nextLine();
             }
             System.out.println("wrong option");
         }
-
-        System.out.print("type (standard,premium or VIP): ");
-        int subscriptionId = scanner.nextInt();
         System.out.print("months: ");
-        int months = scanner.nextInt();
-        System.out.println("price:");
-        double price = scanner.nextDouble();
-        scanner.nextLine();
         boolean active = months > 0;
-        controller.addMember(name,subscriptionId, months,price, active);
+        controller.addMember(name,subscriptionId, months, 0, active);
         System.out.println("member added");
     }
 
@@ -120,7 +109,7 @@ public class MyApplication {
                 scanner.nextLine();
                 if (id > 0) break;
             } else {
-                scanner.nextLine(); // clear invalid input
+                scanner.nextLine();
             }
             System.out.println("wrong option");
         }

@@ -16,13 +16,6 @@ public class MemberController implements IMemberController {
 
     @Override
     public void addMember(String name, int subscriptionId, int months, double price, boolean active) {
-        Subscription sub = repository.getSubscriptionById(subscriptionId);
-        if (sub == null) {
-            System.out.println("Subscription not found!");
-            return;
-        }
-    public void addMember(String name, String type, int months, boolean active) {
-
         if (name == null || name.isBlank()) {
             System.out.println("Name cannot be empty");
             return;
@@ -33,14 +26,22 @@ public class MemberController implements IMemberController {
             return;
         }
 
-        if (!type.equalsIgnoreCase("standard")
-                && !type.equalsIgnoreCase("premium")
-                && !type.equalsIgnoreCase("vip")) {
-            System.out.println("Invalid membership type");
+        Subscription sub = repository.getSubscriptionById(subscriptionId);
+        if (sub == null) {
+            System.out.println("Subscription not found!");
             return;
         }
 
-        double price;
+
+        if (name == null || name.isBlank()) {
+            System.out.println("Name cannot be empty");
+            return;
+        }
+
+        if (months <= 0) {
+            System.out.println("Months must be greater than 0");
+            return;
+        }
 
         price = sub.getPricePerMonth() * months;
 
