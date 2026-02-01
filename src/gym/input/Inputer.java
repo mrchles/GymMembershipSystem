@@ -22,15 +22,6 @@ public class Inputer {
         }
     }
 
-    public static int readIntInRange(Scanner scanner, String prompt, int min, int max) {
-        while (true) {
-            int value = readInt(scanner, prompt);
-            if (value >= min && value <= max) {
-                return value;
-            }
-            System.out.println("Please enter a number between " + min + " and " + max + ".");
-        }
-    }
 
     public static String readNonEmptyLine(Scanner scanner, String prompt) {
         while (true) {

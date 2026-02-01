@@ -1,9 +1,10 @@
 package gym.controllers;
 
+import gym.controllers.interfaces.IAuthController;
 import gym.models.User;
 import gym.repo.interfaces.IUserRepository;
 
-public class AuthController {
+public class AuthController implements IAuthController {
     private final IUserRepository userRepo;
 
     public AuthController(IUserRepository userRepo) {

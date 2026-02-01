@@ -8,7 +8,7 @@ import gym.repo.MemberRepository;
 import gym.repo.TrainerRepository;
 
 import java.util.List;
-import java.util.Scanner;
+
 
 public class TrainerController implements ITrainerController {
 

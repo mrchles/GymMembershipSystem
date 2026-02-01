@@ -6,7 +6,7 @@ public class Member {
     private final int months;
     private final double price;
     private final boolean active;
-    private final TrainerInfo trainer; // вложенный объект для тренера
+    private final TrainerInfo trainer;
     private final Subscription subscription;
 
     private Member(Builder b) {
