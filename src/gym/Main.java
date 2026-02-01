@@ -35,7 +35,7 @@ public class Main {
         AuthController auth = new AuthController(userRepo);
 
         User currentUser = auth.login(loginInput, passwordInput);
-        System.out.println("Logged in as: " + currentUser.getRole());
+        System.out.println("Logged in as: " + currentUser.getUsername() + " [" + currentUser.getRole() + "]");
 
         MemberRepository memberRepo = new MemberRepository(db);
         IMemberController memberController = new MemberController(memberRepo);

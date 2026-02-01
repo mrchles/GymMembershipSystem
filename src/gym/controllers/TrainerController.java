@@ -26,13 +26,11 @@ public class TrainerController implements ITrainerController {
     }
 
     @Override
-    public void chooseTrainer(User user) {
-        if (user.getRole() != Role.ADMIN) {
-            System.out.println("Access denied! Only ADMIN can assign trainers.");
+    public void chooseTrainer(User user,int memberId, int trainerId) {
+        if (user.getRole() != Role.ADMIN && user.getRole() != Role.EDITOR) {
+            System.out.println("Access denied!");
             return;
         }
-
-        Scanner sc = new Scanner(System.in);
 
         List<Trainers> trainers = trainerRepo.getAllTrainers();
         if (trainers.isEmpty()) {
@@ -44,12 +42,6 @@ public class TrainerController implements ITrainerController {
         for (Trainers t : trainers) {
             System.out.println(t.getId() + ". " + t.getName() + " (" + t.getSpecialization() + ")");
         }
-
-        System.out.print("Enter member ID: ");
-        int memberId = sc.nextInt();
-
-        System.out.print("Enter trainer ID: ");
-        int trainerId = sc.nextInt();
 
         memberRepo.assignTrainer(memberId, trainerId);
         System.out.println("Trainer assigned successfully");

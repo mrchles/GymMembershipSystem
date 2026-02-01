@@ -29,7 +29,8 @@ public class UserRepository implements IUserRepository {
                         rs.getInt("id"),
                         rs.getString("username"),
                         rs.getString("password"),
-                        Role.valueOf(rs.getString("role"))
+                        Role.valueOf(rs.getString("role")),
+                        rs.getInt("member_id")
                 );
             }
         } catch (SQLException e) {
