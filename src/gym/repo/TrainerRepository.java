@@ -30,7 +30,7 @@ public class TrainerRepository implements ITrainerRepository {
                 ));
             }
         } catch (SQLException e) {
-            System.out.println("Get trainers error: " + e.getMessage());
+            System.out.println(e.getMessage());
         }
         return trainers;
     }
@@ -43,7 +43,7 @@ public class TrainerRepository implements ITrainerRepository {
             st.setString(2, specialization);
             st.executeUpdate();
         } catch (SQLException e) {
-            System.out.println("Add trainer error: " + e.getMessage());
+            System.out.println(e.getMessage());
         }
     }
 }

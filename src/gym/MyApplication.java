@@ -4,6 +4,8 @@ import gym.controllers.interfaces.IMemberController;
 import java.util.Scanner;
 import java.util.List;
 import gym.controllers.TrainerController;
+import gym.input.Inputer;
+import gym.menu.Menu;
 import gym.models.Trainers;
 import gym.models.User;
 
@@ -23,38 +25,46 @@ public class MyApplication {
     public void start() {
         boolean run = true;
 
+
         while (run) {
-            System.out.println("gym fitness membership system:");
-            System.out.println("select option:");
-            System.out.println("1. add member");
-            System.out.println("2. show all members");
-            System.out.println("3. show active memberships");
-            System.out.println("4. delete members");
-            System.out.println("5. show all trainers:");
-            System.out.println("6. choose trainers:");
-            System.out.println("0. exit");
-            System.out.print("enter: ");
+            Menu.Menu(currentUser);
 
-            int choice = -1;
-            if (scanner.hasNextInt()) {
-                choice = scanner.nextInt();
-            } else {
-                scanner.nextLine();
-            }
-            scanner.nextLine();
+            int choice = Inputer.readInt(scanner, "Enter your choice: ");
 
-            switch (choice) {
-                case 1 -> addMember();
-                case 2 -> controller.showMembers(currentUser);
-                case 3 -> controller.showActiveMemberships(currentUser);
-                case 4 -> deleteMember(currentUser);
-                case 5 -> showAllTrainers();
-                case 6 -> trainerController.chooseTrainer(currentUser);
-                case 0 -> run = false;
-                default -> System.out.println("wrong option");
+            switch (currentUser.getRole()) {
+                case ADMIN, EDITOR -> run = handleAdminOrEditorChoice(choice);
+                case MEMBER        -> run = handleMemberChoice(choice);
             }
         }
     }
+
+    private boolean handleAdminOrEditorChoice(int choice) {
+        switch (choice) {
+            case 1 -> addMember();
+            case 2 -> controller.showMembers(currentUser);
+            case 3 -> controller.showActiveMemberships(currentUser);
+            case 4 -> deleteMember(currentUser);
+            case 5 -> showAllTrainers();
+            case 6 -> assignTrainer();
+            case 7 -> searchMemberByName();
+            case 8 -> controller.showSubscriptions();
+            case 0 -> { return false; }
+            default -> System.out.println("Invalid option. Please try again.");
+        }
+        return true;
+    }
+
+    private boolean handleMemberChoice(int choice) {
+        switch (choice) {
+            case 1 -> controller.showMyProfile(currentUser);
+            case 2 -> showAllTrainers();
+            case 3 -> searchMemberByName();
+            case 0 -> { return false; }
+            default -> System.out.println("Invalid option. Please try again.");
+        }
+        return true;
+    }
+
 
     private void addMember() {
         System.out.print("full name: ");
@@ -122,4 +132,18 @@ public class MyApplication {
             System.out.println(t.getId() + ". " + t.getName() + " (" + t.getSpecialization() + ")");
         }
     }
+    private void assignTrainer() {
+        showAllTrainers();
+
+        int memberId = Inputer.readInt(scanner, "Enter member ID: ");
+        int trainerId = Inputer.readInt(scanner, "Enter trainer ID: ");
+
+        trainerController.chooseTrainer(currentUser, memberId, trainerId);
+    }
+
+    private void searchMemberByName() {
+        String name = Inputer.readNonEmptyLine(scanner, "Enter name to search: ");
+        controller.findMemberByName(currentUser, name);
+    }
 }
+

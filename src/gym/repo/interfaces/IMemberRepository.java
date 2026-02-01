@@ -11,4 +11,7 @@ public interface IMemberRepository {
     boolean deleteMember(int id);
     void assignTrainer(int memberId, int trainerId);
     Subscription getSubscriptionById(int subscriptionId);
+    Member getMemberById(int id);
+    List<Member> findMembersByName(String name);
+    List<Subscription> getAllSubscriptions();
 }

@@ -22,4 +22,9 @@ public class Trainers {
     public String getSpecialization() {
         return specialization;
     }
+
+    @Override
+    public String toString() {
+        return id + ". " + name + " (" + specialization + ")";
+    }
 }

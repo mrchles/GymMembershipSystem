@@ -6,7 +6,7 @@ import gym.repo.interfaces.IMemberRepository;
 import gym.models.Member;
 import gym.models.Role;
 import gym.models.User;
-import gym.repo.interfaces.IMemberRepository;
+
 
 import java.util.List;
 
@@ -21,7 +21,7 @@ public class MemberController implements IMemberController {
     @Override
     public void addMember(User user,String name, int subscriptionId, int months, double price, boolean active) {
         if (user.getRole() == Role.MEMBER) {
-            System.out.println("Access denied! MEMBER cannot add members.");
+            System.out.println("Access denied!");
             return;
         }
         if (name == null || name.isBlank()) {
@@ -53,13 +53,25 @@ public class MemberController implements IMemberController {
             return;
         }
         List<Member> members = repository.getAllMembers();
+        if (members.isEmpty()) {
+            System.out.println("No members found.");
+            return;
+        }
         members.forEach(System.out::println);
     }
 
 
     @Override
     public void showActiveMemberships(User user) {
+        if (user.getRole() == Role.MEMBER) {
+            System.out.println("Access denied!");
+            return;
+        }
         List<Member> members = repository.getActiveMembers();
+        if (members.isEmpty()) {
+            System.out.println("No active memberships found.");
+            return;
+        }
         members.forEach(System.out::println);
     };
 
@@ -81,4 +93,72 @@ public class MemberController implements IMemberController {
             System.out.println("Member not found");
         }
     }
+
+    @Override
+    public void showMyProfile(User user) {
+        if (user.getRole() == Role.MEMBER) {
+
+            if (user.getMemberId() <= 0) {
+                System.out.println("Your account is not linked to a member profile.");
+                return;
+            }
+            Member member = repository.getMemberById(user.getMemberId());
+            if (member == null) {
+                System.out.println("Member profile not found.");
+            } else {
+                System.out.println(member);
+            }
+        } else {
+
+            System.out.println("Use 'Show all members' to view all profiles.");
+        }
+    }
+
+    @Override
+    public void findMemberByName(User user, String name) {
+        if (name == null || name.isBlank()) {
+            System.out.println("Search name cannot be empty.");
+            return;
+        }
+
+        List<Member> results = repository.findMembersByName(name);
+
+        if (results.isEmpty()) {
+            System.out.println("No members found with name: " + name);
+            return;
+        }
+
+        if (user.getRole() == Role.MEMBER) {
+
+            results.stream()
+                    .filter(m -> m.getId() == user.getMemberId())
+                    .forEach(System.out::println);
+
+            if (results.stream().noneMatch(m -> m.getId() == user.getMemberId())) {
+                System.out.println("No results found for your profile.");
+            }
+        } else {
+
+            System.out.println("Found " + results.size() + " member(s):");
+            results.forEach(System.out::println);
+        }
+    }
+
+    @Override
+    public void showSubscriptions() {
+        List<Subscription> subscriptions = repository.getAllSubscriptions();
+        if (subscriptions.isEmpty()) {
+            System.out.println("No subscriptions available.");
+            return;
+        }
+        System.out.println("Available subscriptions:");
+        subscriptions.forEach(System.out::println);
+    }
+
+     @Override
+    public List<Subscription> getSubscriptionsList() {
+        return repository.getAllSubscriptions();
+    }
 }
+
+
