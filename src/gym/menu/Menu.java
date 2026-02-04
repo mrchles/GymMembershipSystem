@@ -9,7 +9,6 @@ public class Menu {
     }
     public static void Menu(User user) {
         System.out.println("GYM fitness database system");
-        System.out.println("Select option:");
 
         switch (user.getRole()) {
             case ADMIN   -> AdminMenu();

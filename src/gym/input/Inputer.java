@@ -4,9 +4,7 @@ import java.util.Scanner;
 
 public class Inputer {
 
-    private Inputer() {
-
-    }
+    private Inputer() {}
 
     public static int readInt(Scanner scanner, String prompt) {
         while (true) {

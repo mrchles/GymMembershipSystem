@@ -20,13 +20,6 @@ public class Member {
     }
 
     public int getId() { return id; }
-    public String getFullName() { return fullName; }
-    public int getMonths() { return months; }
-    public double getPrice() { return price; }
-    public boolean isActive() { return active; }
-    public TrainerInfo getTrainer() { return trainer; }
-    public Subscription getSubscription() { return subscription; }
-
 
     @Override
     public String toString() {
@@ -70,7 +63,7 @@ public class Member {
 
         @Override
         public String toString() {
-            return name + " (" + specialization + ")";
+            return id + name + " (" + specialization + ")";
         }
     }
 }
