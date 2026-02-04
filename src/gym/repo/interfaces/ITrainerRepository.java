@@ -6,5 +6,4 @@ import java.util.List;
 
 public interface ITrainerRepository {
     List<Trainers> getAllTrainers();
-    void addTrainer(String name, String specialization);
 }

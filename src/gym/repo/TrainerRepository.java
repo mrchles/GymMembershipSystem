@@ -34,16 +34,4 @@ public class TrainerRepository implements ITrainerRepository {
         }
         return trainers;
     }
-
-    @Override
-    public void addTrainer(String name, String specialization) {
-        String sql = "INSERT INTO trainers (name, specialization) VALUES (?,?)";
-        try (PreparedStatement st = db.getConnection().prepareStatement(sql)) {
-            st.setString(1, name);
-            st.setString(2, specialization);
-            st.executeUpdate();
-        } catch (SQLException e) {
-            System.out.println(e.getMessage());
-        }
-    }
 }
