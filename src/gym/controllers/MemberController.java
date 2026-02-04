@@ -155,10 +155,6 @@ public class MemberController implements IMemberController {
         subscriptions.forEach(System.out::println);
     }
 
-     @Override
-    public List<Subscription> getSubscriptionsList() {
-        return repository.getAllSubscriptions();
-    }
 }
 
 
